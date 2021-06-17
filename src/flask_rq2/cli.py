@@ -121,6 +121,8 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.option('--path', '-P', default='.', help='Specify the import path.')
 @click.option('--results-ttl', type=int, default=DEFAULT_RESULT_TTL,
               help='Default results timeout to be used')
+@click.option('--with-scheduler', '-s', is_flag=True,
+              help='Run worker with scheduler')
 @click.option('--worker-ttl', type=int, default=DEFAULT_WORKER_TTL,
               help='Default worker timeout to be used (default: 420)')
 @click.option('--verbose', '-v', is_flag=True, help='Show more output')
@@ -134,8 +136,8 @@ def info(rq, ctx, path, interval, raw, only_queues, only_workers, by_queue,
 @click.argument('queues', nargs=-1)
 @rq_command()
 def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
-           worker_ttl, verbose, quiet, sentry_dsn, exception_handler, pid,
-           queues):
+           with_scheduler, worker_ttl, verbose, quiet, sentry_dsn,
+           exception_handler, pid, queues):
     "Starts an RQ worker."
     ctx.invoke(
         rq_cli.worker,
@@ -144,6 +146,7 @@ def worker(rq, ctx, burst, logging_level, name, path, results_ttl,
         name=name,
         path=path,
         results_ttl=results_ttl,
+        with_scheduler=with_scheduler,
         worker_ttl=worker_ttl,
         verbose=verbose,
         quiet=quiet,
